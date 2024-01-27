@@ -1,10 +1,16 @@
-use std::fs;
+use std::{fs, fmt};
 
 #[derive(Debug)]
 pub struct Project {
   pub path: String,
   pub name: String,
   pub is_git: bool,
+}
+
+impl fmt::Display for Project {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    write!(f, "{}", self.name)
+  }
 }
 
 impl Project {
