@@ -1,4 +1,7 @@
-mod inquire;
+use std::process;
+
+mod action;
+mod answer;
 mod project;
 
 fn main() {
@@ -8,11 +11,12 @@ fn main() {
     exclude_folders,
   );
 
-  let selected_project = inquire::multiple_select(projects);
+  let selected_project = answer::select_projects(projects);
 
-  if let Ok(selected_project) = selected_project {
-    println!("{:#?}", selected_project);
-  } else {
-    println!("Error: {:?}", selected_project);
+  if let Err(e) = selected_project {
+    eprintln!("Error: {:?}", e);
+    process::exit(1);
   }
+
+  answer::action_run(selected_project.unwrap());
 }

@@ -18,8 +18,6 @@ pub fn select_projects(
 }
 
 pub fn action_run(projects: Vec<Project>) {
-  
-
   let ans = MultiSelect::new(
     "Select the action:",
     ActionType::iter().collect::<Vec<&ActionType>>(),

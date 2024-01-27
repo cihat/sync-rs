@@ -1,4 +1,4 @@
-use std::{fs, fmt};
+use std::{fmt, fs};
 
 #[derive(Debug)]
 pub struct Project {
