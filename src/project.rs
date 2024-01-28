@@ -37,6 +37,7 @@ impl Project {
         is_git,
       ));
     }
+
     projects
   }
 }
