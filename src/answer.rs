@@ -1,25 +1,39 @@
 use std::process;
 
-use crate::action::{ActionFactory, ActionType};
 use crate::project::Project;
 use inquire::{formatter::MultiOptionFormatter, MultiSelect};
 
-pub fn get_workdir() -> Vec<Project> {
-  let exclude_folders = vec![".DS_Store".to_string(), "node_modules".to_string()];
-  let projects = Project::get_projects(
-    "/Users/cihatsalik/github/source".to_string(),
-    // workspace_path(),
-    exclude_folders,
-  );
+#[derive(Debug)]
+pub struct Answer {
+  pub projects: Vec<Project>,
+  pub actions: Vec<String>,
+  pub origin: String,
+  pub branch: String,
+}
 
-  let selected_project = select_projects(projects);
+impl Answer {
+  pub fn build() -> Self {
+    let projects = Project::get_projects(
+      "/Users/cihatsalik/github/source".to_string(),
+      // workspace_path(),
+      vec![".DS_Store".to_string(), "node_modules".to_string()],
+    );
+    let selected_project: Result<Vec<Project>, inquire::InquireError> = select_projects(projects);
+    let (origin, branch) = get_origin_and_branch();
+    let actions = select_actions();
 
-  if let Err(e) = selected_project {
-    eprintln!("Error: {:?}", e);
-    process::exit(1);
+    if let Err(e) = selected_project {
+      eprintln!("Error: {:?}", e);
+      process::exit(1);
+    }
+
+    Self {
+      projects: selected_project.unwrap(),
+      actions: actions.unwrap(),
+      origin,
+      branch,
+    }
   }
-
-  selected_project.unwrap()
 }
 
 //TODO: add validation and implement this function for dynamic path
@@ -49,25 +63,22 @@ fn select_projects(projects: Vec<Project>) -> Result<Vec<Project>, inquire::erro
   Ok(ans.unwrap())
 }
 
-pub fn action_run(projects: Vec<Project>) {
+fn select_actions() -> Result<Vec<String>, inquire::error::InquireError> {
+  let formatter: MultiOptionFormatter<'_, String> = &|a| format!("{} different actions", a.len());
+
   let ans = MultiSelect::new(
-    "Select the action:",
-    ActionType::iter().collect::<Vec<&ActionType>>(),
+    "Select the actions:",
+    vec!["Git Sync".to_string(), "Custom Command".to_string()],
   )
+  .with_formatter(formatter)
   .prompt();
 
-  match ans {
-    Ok(actions) => {
-      projects.iter().for_each(|project| {
-        actions.iter().for_each(|action_type| {
-          let action = ActionFactory::get_action(action_type);
-          action.run(project).unwrap();
-        });
-      });
-    }
-    Err(e) => {
-      eprintln!("Error: {:?}", e);
-      std::process::exit(1);
-    }
-  }
+  Ok(ans.unwrap())
+}
+
+fn get_origin_and_branch() -> (String, String) {
+  let remote = inquire::Text::new("Enter the remote: ").prompt().unwrap();
+  let branch = inquire::Text::new("Enter the branch: ").prompt().unwrap();
+
+  (remote, branch)
 }
