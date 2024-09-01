@@ -1,10 +1,10 @@
 mod action;
 mod answer;
-mod project;
 mod error;
 mod git_action;
+mod project;
 
-use action::{Action, ActionTrait};
+use action::ExecutableAction;
 use answer::Answer;
 use std::process;
 
@@ -12,19 +12,11 @@ fn main() {
   let answers = Answer::build();
   println!("{:#?}", answers);
 
-  let action = Action {
-    projects: answers.projects,
-    actions: answers.actions,
-    origin: answers.origin,
-    branch: answers.branch,
-  };
-
-  match action.run() {
+  match answers.run() {
     Ok(_) => {
       println!("Action completed successfully");
       process::exit(0);
     }
-
     Err(e) => {
       eprintln!("{}", e);
       process::exit(1);

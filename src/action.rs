@@ -1,38 +1,26 @@
-use crate::{error::ActionError, git_action::GitActionType, project::Project};
+use crate::{answer::Answer, error::ActionError, git_action::GitActionType};
 
-#[allow(dead_code)]
-pub trait ActionTrait {
+pub trait ExecutableAction {
   fn run(&self) -> Result<(), ActionError>;
 }
 
-#[derive(Debug)]
-#[allow(dead_code)]
-pub struct Action {
-  pub projects: Vec<Project>,
-  pub actions: Vec<String>,
-  pub origin: String,
-  pub branch: String,
-}
-
-#[allow(dead_code)]
-impl ActionTrait for Action {
+impl ExecutableAction for Answer {
   fn run(&self) -> Result<(), ActionError> {
     for project in &self.projects {
       if !project.is_git {
         println!(
-          "{a} project have not a git repository. Skipping...",
-          a = project.name
+          "{} project does not have a git repository. Skipping...",
+          project.name
         );
         continue;
       }
 
-      println!("Executing action for {a} project...", a = project.name);
+      println!("Executing action for {} project...", project.name);
 
-      GitActionType::PULL.action(&project);
-      GitActionType::PUSH.action(&project);
-      GitActionType::SYNC.action(&project);
+      GitActionType::PULL.action(&project, &self.origin, &self.branch)?;
+      GitActionType::PUSH.action(&project, &self.target, &self.branch)?;
     }
 
-    return Ok(());
+    Ok(())
   }
 }
