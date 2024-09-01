@@ -1,4 +1,4 @@
-use crate::{errors::ActionError, project::Project};
+use crate::{error::ActionError, project::Project};
 
 #[derive(Debug)]
 #[allow(dead_code)]
