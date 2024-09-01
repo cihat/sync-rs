@@ -4,6 +4,7 @@ use crate::project::Project;
 use inquire::{formatter::MultiOptionFormatter, MultiSelect};
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct Answer {
   pub projects: Vec<Project>,
   pub actions: Vec<String>,
@@ -36,6 +37,7 @@ impl Answer {
   }
 }
 
+#[allow(dead_code)]
 //TODO: add validation and implement this function for dynamic path
 fn workspace_path() -> String {
   let ans = inquire::Text::new("Enter the workspace path:").prompt();

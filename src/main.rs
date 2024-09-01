@@ -2,8 +2,15 @@ mod action;
 mod answer;
 mod project;
 
-fn main() {
-  let answers = answer::Answer::build();
+use answer::Answer;
 
-  println!("{:#?}", answers);
+fn main() {
+  let answers = Answer::build();
+
+  let Answer {
+    projects,
+    actions,
+    origin,
+    branch,
+  } = answers;
 }
