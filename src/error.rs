@@ -2,14 +2,14 @@ use std::fmt;
 
 use git2::Error as GitError;
 
-use crate::action::ActionEnum;
+use crate::action::GitActionType;
 
-impl fmt::Display for ActionEnum {
+impl fmt::Display for GitActionType {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     match *self {
-      ActionEnum::PULL => write!(f, "PULL"),
-      ActionEnum::PUSH => write!(f, "PUSH"),
-      ActionEnum::SYNC => write!(f, "SYNC"),
+      GitActionType::PULL => write!(f, "PULL"),
+      GitActionType::PUSH => write!(f, "PUSH"),
+      GitActionType::SYNC => write!(f, "SYNC"),
     }
   }
 }

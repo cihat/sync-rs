@@ -1,40 +1,4 @@
-use crate::{error::ActionError, project::Project};
-
-#[derive(Debug)]
-#[allow(dead_code)]
-pub enum ActionEnum {
-  PULL,
-  PUSH,
-  SYNC,
-}
-
-impl ActionEnum {
-  fn action(&self, project: &Project) -> Result<(), ActionError> {
-    match self {
-      ActionEnum::PULL => {
-        println!("Project: {}\nExecuting PULL action...", project.name);
-        println!("Implement the actual pull action logic here");
-
-        // todo!("Implement the actual pull action logic here");
-        Ok(())
-      }
-      ActionEnum::PUSH => {
-        println!("Project: {}\nExecuting PUSH action...", project.name);
-        println!("Implement the actual push action logic here");
-
-        // todo!("Implement the actual push action logic here");
-        Ok(())
-      }
-      ActionEnum::SYNC => {
-        println!("Project: {}\nExecuting SYNC action...", project.name);
-        println!("Implement the actual sync action logic here");
-
-        // todo!("Implement the actual sync action logic here");
-        Ok(())
-      }
-    }
-  }
-}
+use crate::{error::ActionError, git_action::GitActionType, project::Project};
 
 #[allow(dead_code)]
 pub trait ActionTrait {
@@ -64,9 +28,9 @@ impl ActionTrait for Action {
 
       println!("Executing action for {a} project...", a = project.name);
 
-      ActionEnum::PULL.action(&project);
-      ActionEnum::PUSH.action(&project);
-      ActionEnum::SYNC.action(&project);
+      GitActionType::PULL.action(&project);
+      GitActionType::PUSH.action(&project);
+      GitActionType::SYNC.action(&project);
     }
 
     return Ok(());

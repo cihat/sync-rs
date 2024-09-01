@@ -2,6 +2,7 @@ mod action;
 mod answer;
 mod project;
 mod error;
+mod git_action;
 
 use action::{Action, ActionTrait};
 use answer::Answer;
