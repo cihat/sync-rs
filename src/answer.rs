@@ -9,6 +9,7 @@ pub struct Answer {
   pub projects: Vec<Project>,
   pub actions: Vec<String>,
   pub origin: String,
+  pub target: String,
   pub branch: String,
 }
 
@@ -20,7 +21,7 @@ impl Answer {
       vec![".DS_Store".to_string(), "node_modules".to_string()],
     );
     let selected_project: Result<Vec<Project>, inquire::InquireError> = select_projects(projects);
-    let (origin, branch) = get_origin_and_branch();
+    let (origin, branch, target) = get_origin_and_branch();
     let actions = select_actions();
 
     if let Err(e) = selected_project {
@@ -32,6 +33,7 @@ impl Answer {
       projects: selected_project.unwrap(),
       actions: actions.unwrap(),
       origin,
+      target,
       branch,
     }
   }
@@ -76,9 +78,12 @@ fn select_actions() -> Result<Vec<String>, inquire::error::InquireError> {
   Ok(ans.unwrap())
 }
 
-fn get_origin_and_branch() -> (String, String) {
+fn get_origin_and_branch() -> (String, String, String) {
   let remote = inquire::Text::new("Enter the remote: ").prompt().unwrap();
+  let target = inquire::Text::new("Enter the target remote : ")
+    .prompt()
+    .unwrap();
   let branch = inquire::Text::new("Enter the branch: ").prompt().unwrap();
 
-  (remote, branch)
+  (remote, target, branch)
 }
