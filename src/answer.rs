@@ -67,13 +67,11 @@ fn select_projects(projects: Vec<Project>) -> Result<Vec<Project>, inquire::erro
 
 fn select_actions() -> Result<Vec<String>, inquire::error::InquireError> {
   let formatter: MultiOptionFormatter<'_, String> = &|a| format!("{} different actions", a.len());
+  let options = vec!["PULL".to_string(), "PUSH".to_string(), "SYNC".to_string()];
 
-  let ans = MultiSelect::new(
-    "Select the actions:",
-    vec!["Git Sync".to_string(), "Custom Command".to_string()],
-  )
-  .with_formatter(formatter)
-  .prompt();
+  let ans = MultiSelect::new("Select the actions:", options)
+    .with_formatter(formatter)
+    .prompt();
 
   Ok(ans.unwrap())
 }
