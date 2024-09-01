@@ -1,25 +1,27 @@
-use std::fmt;
+use core::fmt;
+use git2::Error as Git2Error;
 
-use git2::Error as GitError;
+use crate::git_action::GitActionType;
 
-use crate::action::GitActionType;
+#[derive(Debug)]
+pub enum ActionError {
+  GitError(Git2Error),
+  ExecutionError(String),
+}
 
+impl From<Git2Error> for ActionError {
+  fn from(error: Git2Error) -> Self {
+    ActionError::GitError(error)
+  }
+}
 impl fmt::Display for GitActionType {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     match *self {
       GitActionType::PULL => write!(f, "PULL"),
       GitActionType::PUSH => write!(f, "PUSH"),
-      GitActionType::SYNC => write!(f, "SYNC"),
     }
   }
 }
-
-#[derive(Debug)]
-pub enum ActionError {
-  GitError(GitError),
-  ExecutionError(String),
-}
-
 impl fmt::Display for ActionError {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     match self {
@@ -28,5 +30,3 @@ impl fmt::Display for ActionError {
     }
   }
 }
-
-impl std::error::Error for ActionError {}
