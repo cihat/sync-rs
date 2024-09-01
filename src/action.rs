@@ -12,21 +12,24 @@ impl ActionEnum {
   fn action(&self, project: &Project) -> Result<(), ActionError> {
     match self {
       ActionEnum::PULL => {
-        println!("Project: {}", project.name);
-        println!("Executing PULL action...");
-        // Implement the actual pull action logic here
+        println!("Project: {}\nExecuting PULL action...", project.name);
+        println!("Implement the actual pull action logic here");
+
+        // todo!("Implement the actual pull action logic here");
         Ok(())
       }
       ActionEnum::PUSH => {
-        println!("Project: {}", project.name);
-        println!("Executing PUSH action...");
-        // Implement the actual push action logic here
+        println!("Project: {}\nExecuting PUSH action...", project.name);
+        println!("Implement the actual push action logic here");
+
+        // todo!("Implement the actual push action logic here");
         Ok(())
       }
       ActionEnum::SYNC => {
-        println!("Project: {}", project.name);
-        println!("Executing SYNC action...");
-        // Implement the actual sync action logic here
+        println!("Project: {}\nExecuting SYNC action...", project.name);
+        println!("Implement the actual sync action logic here");
+
+        // todo!("Implement the actual sync action logic here");
         Ok(())
       }
     }
